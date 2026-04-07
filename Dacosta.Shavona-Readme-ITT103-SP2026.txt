@@ -1,0 +1,101 @@
+Authors: Shavona Dacosta | Code Cobras
+Date Created: March 31, 2026
+Course: ITT103 - Programming Techniques
+GitHub Public URL to Code: 
+
+1. Purpose of the Program
+The Best Buy Retail Store POS (Point of Sale) System is a terminal based application designed to manage retail transactions. It handles a real time inventory of 10 products, allowing users to add or remove items from a shopping cart and generate professional, itemized and accurate receipts. 
+
+As a Software Developer Hired by Best Buy Retail Store which is a small yet growing business, I was appointment by the manager to develop a POS system to help make working life easier for the cashiers as they are now planning on going Digital hence the purpose of the program. 
+
+2. Program Modifications
+
+Modification 1: Inventory Management
+
+Error: When an item was added or removed, the program update the total bill but sometimes fail to update the item quantity list correctly. This meant a customer could buy more items than what was in stock.
+
+Modification: The indeces was synchronized by using store_item.index(item_name) to ensure that any change to a product’s stock happened at the exact same position in the item_quantity array as its name in store_item. I’ve also added an if qty <=item_quantity[idx]: check to block sales that exceeded available stock. 
+
+Modification 2: Scope Error
+
+Error: The program crashes with a Name Error because the received and change variables were inside the process_payment function and couldn’t be seen by the main inventory loop.
+
+Modification: I modified the function to use a Return Statement instead of just printing the change, I used return amount_received, customer_change. In the main loop, I caught this data using payment_info = process_payment(final). This allowed the inventory to officially record and print the payment details on the final receipt.
+
+Modification 3: String Sensitivity Crashes
+
+Error: If a user typed “corn beef” instead of “Corn Beef”, the program would skip the item or crash because Python treats uppercase and lowercase letters as completely different things. 
+
+Modification: I integrated the .lower() method during confirmation prompts and added specific “Item Not Found” print statements to guide the user to match the inventory list’s capitalization exactly.
+
+Modification 4:  The Negative Total
+
+Error: In Action 2 (Remove Item), if a cashier accidentally removed more items than were in the cart, the total would drop below $0.00, which is impossible for a retail transaction.
+
+Modification: Ive added a validation check, if refunbd <= total:. This ensures the system only processes a removal if the refund amount is less than or equal to the current running balance. I also used the += operator to accurately return the refunded units back into the storre’s inventory.
+
+Modification 5: Instant Close Bug 
+
+Error: When running the final .py file on Windows, the program would finish the transaction and immediately disappear before the cashier could read the receipt.
+
+Modification: I’ve added a mechanical pause at the very end of the script using input(“press Enter to close…”). This forces Windows to keep the terminal window open until the user explicitly decides to close it.
+
+3. How to Run the Program
+
+To run this application, ensure you have Python 3 installed on your computer. Open the project file in your preferred Python environment (such as PyCharm) or a standard terminal window and execute the script. Simply follow the onscreen menu prompts to interact with the inventory and complete customer transactions.
+
+1) Add Item to Cart
+When you select this option, the system prompts for the exact product name from the inventory list.
+
+Input Validation: The program uses an .index() lookup to verify the item exists. If the name is misspelled or the capitalization is wrong, it triggers an "Item Not Found" alert.
+
+Quantity Check: After entering a quantity, the sysstem compares it against the item_quantity array. If the request exceeds current stock, the transaction is blocked with an "Insufficient Stock" error.
+
+Confirmation: A final (yes/no) prompt allows the cashier to verify the subtotal before the inventory is officially deductd and the item is appended to the cart_items list.
+
+2) Remove Item from Cart
+
+This option allows for "Reverse Inventory Management" to handle customer changes or cashier errors.
+
+Stock Restoration: When an item is removed,, the system uses the += operator to physically add the units back into the item_quantity array so they can be sold to another customer.
+
+Balance Adjustment: The program subtracts the cost from the total running balance.
+Safety Gate: A validatin check (if refund <= total) prevents the system from accidentally refunding more money than the current session's total.
+
+3) View Current Cart
+
+This provides a real time audit of the shopping session without triggering a checkout.
+
+Empty Cart Logic: If no items have been added, the system displays "Cart is Empty" using an if not cart_items check.
+
+Itemized Breakdown: If items exist, the program iterates through the cart_items list to display a clean table showing each item's name, quantity, and individual subtotal.
+
+4) Checkout and Payment
+
+This is the final  phase of the program.
+
+Automatic Calculations: The system calls the calculate_discount() function (applying 5% for totals > $5,000) and adds a 10% sales tax to reach the final amount.
+
+Payment Validation: The process_payment() function forces a loop until the amount entered is enough to cover the bill.
+
+Receipt Generation: Once paid, the function returns a Received and Change to the main loop, which then  print the “Official Receipt" and close the transaction.
+
+4. Assumptions and Limitations
+
+Assumptions: 
+
+1.It is assumed that users will enter item names exactly as they appear in the inventory list. The program assumes a fixed sales tax rate of 10%.
+
+2.The program assumes it is being run on a single terminal by one operator at a time.
+
+
+3.It is assumed that once a user selects Action 4 (Checkout), the shopping phase is over. The program calculates tax and discounts based on the items currently in the cart_items list at that specific moment.
+
+Limitations: 
+1.	Because the inventory is stored in Python lists, all quantities reset to their original values (e.g. 20 Wata Wata Water) every time you restart the program. It cant remember sales from yesterday.
+
+2.	The program tracks one customer at a time. It cannot hold a cart to serve a second customer while the first one looks for their wallet.
+
+3.	The process_payment function requires the full balance to be paid in one entry. It does not allow a customer to pay $1000 now and $350 later which is not possible at a retail store.
+
+
